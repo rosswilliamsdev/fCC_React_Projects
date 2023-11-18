@@ -1,10 +1,5 @@
 import React from "react";
 
-export default function Preview({text, setText}) {
-
-    return (
-        <div>
-
-        </div>
-    )
+export default function Preview({ text, setText }) {
+  return <div>{text}</div>;
 }
