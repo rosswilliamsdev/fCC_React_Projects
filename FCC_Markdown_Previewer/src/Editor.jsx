@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
-
+import { marked } from 'marked'
 export default function Editor({ text, setText }) {
   const editor = document.getElementById("editor");
 
   function saveText(event) {
-    setText(event.target.value);
-    console.log(text);
+    let prev = document.getElementById('preview')
+    prev.innerHTML = marked.parse(event.target.value)
+    // setText(event.target.value);
+    // console.log(text);
   }
 
   return (
