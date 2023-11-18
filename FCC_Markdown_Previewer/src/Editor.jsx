@@ -12,6 +12,7 @@ export default function Editor({ text, setText }) {
     <div>
       {/* this onChange doesn't work */}
       <textarea id="editor" onChange={saveText}></textarea>
+      <div>hi ross</div>
     </div>
   );
 }
