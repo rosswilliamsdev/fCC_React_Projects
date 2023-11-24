@@ -1,10 +1,10 @@
 import { useState } from "react";
 import "./App.css";
-import Editor from './Editor.jsx'
+import Editor from "./Editor.jsx";
 import Preview from "./Preview";
 
 function App() {
-  const [text, setText] = useState('')
+  const [text, setText] = useState("<h1>Hey there</h1>");
 
   return (
     <div>
