@@ -4,25 +4,22 @@ import Editor from "./Editor.jsx";
 import Preview from "./Preview";
 
 function App() {
+  const defaultMarkdown = `# Welcome #
+## This is my first go with markdown ##
 
-const defaultMarkdown = `
-    # Welcome #
+[Link](www.google.com)
 
-    ## This is my first go with markdown ##
+    <p>Here is a code block</p>
 
-    [Link](www.google.com)
+1. List item one
+2. List item two
 
-      <p>Here is a code block</p>
+> This is a blockquote
 
-    1. List item one
-    2. List item two
+![Mountains rule](/FCC_Markdown_Previewer/src/assets/matterhorn-BLOG-mountains.png)
 
-    >This is a blockquote
-
-    ![Mountains rule](FCC_Markdown_Previewer/src/assets/matterhorn-BLOG-mountains.png)
-
-    Here is some **bold, bold** text
-    `;
+Here is some **bold, bold** text
+`;
 
   const [text, setText] = useState(defaultMarkdown);
 
