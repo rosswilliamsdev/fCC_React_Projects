@@ -40,3 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+
+textarea {
+  width: 50vw;
+  height: 50vh;
+}
