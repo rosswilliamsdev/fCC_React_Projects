@@ -11,7 +11,7 @@ export default function Editor({ text, setText }) {
     // console.log(text);
   }
 
-  // User story #5: trying to set the default editor text to be html markdown
+  // User story #5: trying to set the default editor text to be html markdown on page load
 
   // useEffect(() => {
   //   editor.innerHTML = marked.parse(text);
