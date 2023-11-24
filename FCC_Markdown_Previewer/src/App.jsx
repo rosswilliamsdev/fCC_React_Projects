@@ -4,7 +4,7 @@ import Editor from "./Editor.jsx";
 import Preview from "./Preview";
 
 function App() {
-  const [text, setText] = useState("<h1>Hey there</h1>");
+  const [text, setText] = useState("");
 
   return (
     <div>
