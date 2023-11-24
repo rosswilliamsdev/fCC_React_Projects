@@ -8,22 +8,16 @@ export default function Editor({ text, setText }) {
   function saveText(event) {
     setText(event.target.value);
     prev.innerHTML = marked.parse(text);
-    // console.log(text);
   }
 
   // User story #5: trying to set the default editor text to be html markdown on page load
-
   // useEffect(() => {
   //   editor.innerHTML = marked.parse(text);
-  //   prev.innerHTML = marked.parse(text);
-  // }, [text]);
+  // });
 
   return (
     <div>
-      <textarea id="editor" onChange={saveText}>
-        {text}
-      </textarea>
-      <div>hi ross</div>
+      <textarea id="editor" onChange={() => saveText}></textarea>
     </div>
   );
 }
