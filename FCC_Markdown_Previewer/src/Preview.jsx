@@ -1,6 +1,11 @@
 import React from "react";
-import { marked } from "marked";
-export default function Preview({ text, setText }) {
-  return <div id="preview"></div>;
+import ReactMarkdown from "react-markdown";
+
+export default function Preview({ text }) {
+  return (
+    <div id="preview">
+      <ReactMarkdown>{text}</ReactMarkdown>
+    </div>
+  );
 }
 //
