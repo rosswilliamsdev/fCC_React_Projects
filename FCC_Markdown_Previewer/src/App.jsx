@@ -4,21 +4,37 @@ import Editor from "./Editor.jsx";
 import Preview from "./Preview";
 
 function App() {
-  const defaultMarkdown = `# Welcome #
-## This is my first go with markdown ##
+  const defaultMarkdown = `
+# Welcome to my React Markdown Previewer!
 
-[Link](www.google.com)
+## This is a sub-heading...
+### And here's some other cool stuff:
 
-    <p>Here is a code block</p>
+Heres some code, \`<div></div>\`, between 2 backticks.
 
-1. List item one
-2. List item two
+\`\`\`
+// this is multi-line code:
 
-> This is a blockquote
+function anotherExample(firstLine, lastLine) {
+  if (firstLine == '\`\`\`' && lastLine == '\`\`\`') {
+    return multiLineCode;
+  }
+}
+\`\`\`
 
-![Mountains rule](/FCC_Markdown_Previewer/src/assets/matterhorn-BLOG-mountains.png)
+You can also make text **bold**... whoa!
+Or _italic_.
+Or... **_both!_**
 
-Here is some **bold, bold** text
+There's also [links](https://www.freecodecamp.com), and
+> Block Quotes!
+
+![React Logo w/ Text](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png)
+
+- And of course there are lists.
+  - Some are bulleted.
+      - With different indentation levels.
+        - That look like this.
 `;
 
   const [text, setText] = useState(defaultMarkdown);
