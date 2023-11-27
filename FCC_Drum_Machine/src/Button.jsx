@@ -1,14 +1,14 @@
-import React from "react";
 import { heaterKit } from "./heaterKit";
 
 export default function Button() {
   return (
-    <div>
-      <h1>Hi Ross</h1>
+    <div className="pad-grid">
       {heaterKit.map((element) => {
-        <div id={element.desc} className="drum-pad">
-          {element.letter}
-        </div>;
+        return (
+          <div key={element.id} id={element.desc} className="drum-pad">
+            {element.letter}
+          </div>
+        );
       })}
     </div>
   );
