@@ -1,6 +1,6 @@
 import { heaterKit } from "./heaterKit";
 
-export default function Button() {
+export default function Buttons() {
   return (
     <div className="pad-grid">
       {heaterKit.map((element) => {

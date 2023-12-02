@@ -1,11 +1,11 @@
-import Button from "./Button";
+import Buttons from "./Buttons";
 import "./App.css";
 
 export default function App() {
   return (
     <div id="drum-machine">
       <div id="display">
-        <Button />
+        <Buttons />
       </div>
     </div>
   );
