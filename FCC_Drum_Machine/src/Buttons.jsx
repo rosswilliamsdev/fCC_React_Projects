@@ -1,5 +1,6 @@
 import { heaterKit } from "./heaterKit";
 
+// eslint-disable-next-line react/prop-types
 export default function Buttons({ setDisplay, soundDescMap }) {
   function handleClick(e) {
     let audio = e.target.children[0];
