@@ -1,48 +1,20 @@
 import { heaterKit } from "./heaterKit";
-import { useEffect } from "react";
 
-export default function Buttons() {
-  const display = document.getElementById("display");
-  const handleKeyPress = (event) => {
-    // Define the key-to-sound mapping
-    const soundMap = {
-      q: heaterKit[0].sampleURL,
-      w: heaterKit[1].sampleURL,
-      e: heaterKit[2].sampleURL,
-      a: heaterKit[3].sampleURL,
-      s: heaterKit[4].sampleURL,
-      d: heaterKit[5].sampleURL,
-      z: heaterKit[6].sampleURL,
-      x: heaterKit[7].sampleURL,
-      c: heaterKit[8].sampleURL,
-    };
-
-    // Check if the pressed key has a corresponding sound
-    const keyPressed = event.key.toLowerCase();
-    const soundFileName = soundMap[keyPressed];
-
-    // If a sound is mapped to the pressed key, play it
-    if (soundFileName) {
-      const audio = new Audio(soundFileName);
-      audio.play();
-
-      // create a separate array like soundMap but of the clip titles, display them with an h1 when a key is pressed
-
-      // display.innerHTML = <h1></h1>
-    }
-  };
-
+export default function Buttons({ setDisplay, soundDescMap }) {
   function handleClick(e) {
     let audio = e.target.children[0];
+    let descKeys = Object.keys(soundDescMap);
+    let clickedPadLetter = e.target.innerText.toLowerCase();
     audio.play();
+    // iterate through the soundDescMap object to see if any keys match the letter of the drumpad clicked
+    if (descKeys.includes(clickedPadLetter)) {
+      Object.keys(soundDescMap).forEach((key) => {
+        if (key === clickedPadLetter) {
+          setDisplay(soundDescMap[key]);
+        }
+      });
+    }
   }
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyPress);
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, []);
 
   return (
     <div className="pad-grid">

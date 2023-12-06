@@ -12,6 +12,9 @@ body {
 #drum-machine {
   background-color: #d3d3d3;
   border: 5px solid #ffc000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .drum-pad {
@@ -35,4 +38,22 @@ body {
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
   gap: 5px;
+  margin-right: auto;
+}
+
+#display {
+  margin: auto;
+  text-align: center;
+}
+
+.sample-name {
+  background-color: gray;
+  border-bottom: 2px solid black;
+  border-right: 2px solid black;
+  width: 15rem;
+  height: 3rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
