@@ -28,7 +28,7 @@ export default function App() {
     x: heaterKit[7].desc,
     c: heaterKit[8].desc,
   };
-  const handleKeyPress = (event) => {
+  function handleKeyPress(event) {
 
     // mapping the key pressed
     const keyPressed = event.key.toLowerCase();
@@ -41,7 +41,7 @@ export default function App() {
       setDisplay(descFileName);
       audio.play();
     }
-  };
+  }
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
     return () => {
