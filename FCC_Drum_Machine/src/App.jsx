@@ -29,9 +29,8 @@ export default function App() {
     c: heaterKit[8].desc,
   };
   const handleKeyPress = (event) => {
-    // Define the key-to-sound mapping
 
-    // Check if the pressed key has a corresponding sound
+    // mapping the key pressed
     const keyPressed = event.key.toLowerCase();
     const soundFileName = soundClipsMap[keyPressed];
     const descFileName = soundDescMap[keyPressed];
