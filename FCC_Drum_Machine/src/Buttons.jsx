@@ -2,6 +2,7 @@ import { heaterKit } from "./heaterKit";
 import { useEffect } from "react";
 
 export default function Buttons() {
+  const display = document.getElementById("display");
   const handleKeyPress = (event) => {
     // Define the key-to-sound mapping
     const soundMap = {
@@ -24,8 +25,13 @@ export default function Buttons() {
     if (soundFileName) {
       const audio = new Audio(soundFileName);
       audio.play();
+
+      // create a separate array like soundMap but of the clip titles, display them with an h1 when a key is pressed
+
+      // display.innerHTML = <h1></h1>
     }
   };
+
   function handleClick(e) {
     let audio = e.target.children[0];
     audio.play();
