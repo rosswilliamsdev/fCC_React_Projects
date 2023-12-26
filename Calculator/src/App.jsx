@@ -3,6 +3,8 @@ import "./App.css";
 import Buttons from "./Buttons";
 import { evaluate } from "mathjs";
 
+// using mathjs library to parse the string in the display state, then evaluate it as math
+
 function App() {
   // calc display
   let [display, setDisplay] = useState("0");
@@ -50,11 +52,12 @@ function App() {
       } else {
         if (lastButtonIsOperator) {
           if (button === "-") {
+            // allows for adding, dividing, and multiplying negative numbers
             setDisplay(displayString + " " + button + " ");
           } else {
+            // Removes the last operator and adds a new one
             setDisplay(displayString.slice(0, -2) + button + " ");
           }
-          // Remove the last operator and add the new one
         } else {
           // Adds the operator to the display
           setLastOperator(button);
