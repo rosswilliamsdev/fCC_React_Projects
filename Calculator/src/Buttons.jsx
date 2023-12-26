@@ -1,18 +1,15 @@
 import buttonsObject from "./buttonsObject";
 
-export default function Buttons() {
+export default function Buttons({ handleCalc }) {
   const buttonEntries = Object.entries(buttonsObject);
-//   const style = {
-//     
-//   };
+
   return (
     <div className="button-grid container">
       {buttonEntries.map(([key, value]) => (
-        <div key={key} className={`button ${key}`}>
+        <button onClick={handleCalc} key={key} className={`button ${key}`}>
           {value}
-        </div>
+        </button>
       ))}
     </div>
   );
 }
-

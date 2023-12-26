@@ -10,13 +10,30 @@ body {
   background-color: midnightblue;
 }
 
+.container {
+  background-color: black;
+  width: 375px;
+  border-radius: 5px;
+}
+
+#display {
+  display: flex;
+  justify-content: right;
+  height: 3rem;
+  color: white;
+  font-family: monospace;
+  font-size: 2rem;
+  align-items: center;
+  margin-right: 1rem;
+}
+
 .button-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-areas:
-    "allClear allClear divide multiply"
-    "seven eight nine minus"
-    "four five six plus"
+    "clear clear divide multiply"
+    "seven eight nine subtract"
+    "four five six add"
     "one two three equals"
     "zero zero decimal equals";
 }
@@ -26,23 +43,24 @@ body {
   justify-content: center;
   align-items: center;
   font-weight: bold;
+  font-family: monospace;
   font-size: 1.5rem;
   background: gray;
   padding: 25px;
-  margin: 3px;
+  margin: 5px;
   border-radius: 5px;
   cursor: pointer;
   color: white;
-  border: 3px solid black;
+  border: 2px solid grey;
   transition: color 0.3s, border 0.3s; /* Transition effect for a smooth change */
 }
 .button:hover {
   color: black;
-  border-color: white;
+  border: 1px solid white;
 }
 
-.allClear {
-  grid-area: allClear;
+.clear {
+  grid-area: clear;
 }
 
 .divide {
@@ -65,8 +83,8 @@ body {
   grid-area: nine;
 }
 
-.minus {
-  grid-area: minus;
+.subtract {
+  grid-area: subtract;
 }
 
 .four {
@@ -81,8 +99,8 @@ body {
   grid-area: six;
 }
 
-.plus {
-  grid-area: plus;
+.add {
+  grid-area: add;
 }
 
 .one {
