@@ -1,14 +1,14 @@
-export default function Adjust({ text, length }) {
+export default function Adjuster({ text, length }) {
   return (
-    <div>
-      <h4>{text}</h4>
+    <div className="adjuster">
+      <h6>{text}</h6>
       <div>
-        <button>
-          <i className="fa-solid fa-arrow-up fa-2x"></i>
+        <button className="btn-level">
+          <i className="fa-solid fa-arrow-up"></i>
         </button>
         {length}
         <button>
-          <i className="fa-solid fa-arrow-down fa-2x"></i>
+          <i className="fa-solid fa-arrow-down"></i>
         </button>
       </div>
     </div>
