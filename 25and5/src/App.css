@@ -10,16 +10,16 @@ body {
   color: white;
 }
 
-.adjuster {
+.length-adjuster {
   font-size: 2rem;
 }
 
-.btn-container {
+.length-adjuster-container {
   display: flex;
   justify-content: space-evenly;
 }
 
-.adjuster h6 {
+.length-adjuster h6 {
   margin: 1rem;
 }
 
