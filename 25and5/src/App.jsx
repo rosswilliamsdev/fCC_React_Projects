@@ -6,19 +6,19 @@ import "./App.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 function App() {
-  let [breakLength, setBreakLength] = useState(5);
-  let [sessionLength, setSessionLength] = useState(25);
+  let [breakMinutes, setBreakMinutes] = useState(5);
+  let [sessionMinutes, setSessionMinutes] = useState(25);
   let [timer, setTimer] = useState(25);
   let [isActive, setIsActive] = useState(false);
-  let [seconds, setSeconds] = useState(60);
+  let [seconds, setSeconds] = useState(1);
 
   function handleIncrement(e) {
     let element = e.target;
 
     if (element.className.includes("break")) {
-      setBreakLength((prevBreakLength) => Math.min(60, prevBreakLength + 1));
+      setBreakMinutes((prevBreakLength) => Math.min(60, prevBreakLength + 1));
     } else if (element.className.includes("session")) {
-      setSessionLength((prevSessionLength) =>
+      setSessionMinutes((prevSessionLength) =>
         Math.min(60, prevSessionLength + 1)
       );
     }
@@ -28,9 +28,9 @@ function App() {
     let element = e.target;
 
     if (element.className.includes("break")) {
-      setBreakLength((prevBreakLength) => Math.max(0, prevBreakLength - 1));
+      setBreakMinutes((prevBreakLength) => Math.max(0, prevBreakLength - 1));
     } else if (element.className.includes("session")) {
-      setSessionLength((prevSessionLength) =>
+      setSessionMinutes((prevSessionLength) =>
         Math.max(0, prevSessionLength - 1)
       );
     }
@@ -38,42 +38,55 @@ function App() {
 
   function toggleTimer() {
     setIsActive(!isActive);
-    countdown();
+    if (isActive) {
+      countdown();
+    }
   }
 
   function resetTimer() {
     setIsActive(false);
-    setSessionLength(25);
-    setBreakLength(5);
+    setSessionMinutes(25);
+    setBreakMinutes(5);
   }
+
+  // function minutesCountdown() {
+  //   setTimeout(function () {
+  //     setSessionMinutes((prevSessionLength) =>
+  //       Math.max(0, prevSessionLength - 1)
+  //     );
+  //   }, 1000);
+  // }
 
   function countdown() {
-    console.log("click");
-    // if the timer is active, start the countdown
-    if (isActive) {
-      const secondsCountdown = setInterval(function () {
-        setSeconds((prevSeconds) => Math.max(0, prevSeconds - 1));
-        console.log(seconds);
-        if (seconds === 0) {
-          setSessionLength((prevSessionLength) =>
-            Math.max(0, prevSessionLength - 1)
+    const intervalId = setInterval(function () {
+      setSeconds((prevSeconds) => {
+        const newSeconds = Math.max(0, prevSeconds - 1);
+
+        if (newSeconds === 0) {
+          setSessionMinutes((prevSessionMinutes) =>
+            Math.max(0, prevSessionMinutes - 1)
           );
+
+          if (sessionMinutes === 0) {
+            clearInterval(intervalId);
+            resetTimer();
+          }
+
+          return 59; // Reset seconds to 59 after reaching 0
         }
-        if (sessionLength === 0) {
-          clearInterval(secondsCountdown);
-        }
-      }, 1000);
-    }
+
+        return newSeconds;
+      });
+    }, 1000);
   }
 
-  // rewrite this so when there is only one minute left it displays only seconds
   useEffect(() => {
-    setTimer(
-      seconds === 60
-        ? sessionLength + ":" + "00"
-        : sessionLength + ":" + seconds
-    );
-  }, [sessionLength, seconds]);
+    const formattedSeconds =
+      seconds === 60 ? "00" : seconds < 10 ? `0${seconds}` : seconds;
+    const formattedMinutes =
+      sessionMinutes < 10 ? `0${sessionMinutes}` : sessionMinutes;
+    setTimer(`${formattedMinutes}:${formattedSeconds}`);
+  }, [sessionMinutes, seconds]);
 
   return (
     <div className="container">
@@ -84,7 +97,7 @@ function App() {
           handleDecrement={handleDecrement}
           type="break"
           text="Break Length"
-          length={breakLength}
+          length={breakMinutes}
           id="break-length"
         />
         <LengthAdjuster
@@ -92,7 +105,7 @@ function App() {
           handleDecrement={handleDecrement}
           type="session"
           text="Session Length"
-          length={sessionLength}
+          length={sessionMinutes}
           id="session-length"
         />
       </div>
