@@ -10,7 +10,7 @@ function App() {
   let [sessionMinutes, setSessionMinutes] = useState(25);
   let [timer, setTimer] = useState(25);
   let [isActive, setIsActive] = useState(false);
-  let [seconds, setSeconds] = useState(1);
+  let [seconds, setSeconds] = useState(0);
 
   function handleIncrement(e) {
     let element = e.target;
