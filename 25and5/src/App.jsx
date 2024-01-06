@@ -12,7 +12,7 @@ function App() {
   const [timer, setTimer] = useState(formatTime(sessionMinutes, 0));
   const [isActive, setIsActive] = useState(false);
   const [isBreak, setIsBreak] = useState(false);
-  const [remainingSeconds, setRemainingSeconds] = useState(0);
+  const [remainingSeconds, setRemainingSeconds] = useState(59);
   const [intervalId, setIntervalId] = useState(null);
 
   function formatTime(minutes, seconds) {
@@ -47,11 +47,6 @@ function App() {
 
   function toggleTimer() {
     setIsActive(!isActive);
-    if (!isActive) {
-      startCountdown();
-    } else {
-      clearInterval(intervalId);
-    }
   }
 
   function resetTimer() {
@@ -62,59 +57,22 @@ function App() {
     clearInterval(intervalId);
   }
 
-
   function startCountdown() {
     const newIntervalId = setInterval(function () {
       setRemainingSeconds((prevRemainingSeconds) => {
         const newSeconds = Math.max(0, prevRemainingSeconds - 1);
 
-        if (!isBreak) {
-          if (newSeconds <= 0) {
-            setSessionMinutes((prevSessionMinutes) =>
-              Math.max(0, prevSessionMinutes - 1)
-            );
+        if (newSeconds <= 0) {
+          setSessionMinutes((prevSessionMinutes) =>
+            Math.max(0, prevSessionMinutes - 1)
+          );
 
-            // Check if both sessionMinutes and newSeconds are zero
-            if (sessionMinutes === 0 && prevSessionMinutes === 1) {
-              setIsBreak(true);
-              setTimer(formatTime(breakMinutes, 0)); // Start the break with 0 seconds
-            } else {
-              setTimer(formatTime(sessionMinutes, 59));
-            }
-          }
-        } else {
-          // Handle break countdown
-          if (newSeconds <= 0) {
-            // Handle break countdown logic here
-          }
-        }
-
-        return newSeconds;
-      });
-    }, 1000);
-
-    setIntervalId(newIntervalId);
-  }
-
-  function startCountdown() {
-    const newIntervalId = setInterval(function () {
-      setRemainingSeconds((prevRemainingSeconds) => {
-        const newSeconds = Math.max(0, prevRemainingSeconds - 1);
-
-        if (!isBreak) {
-          if (newSeconds <= 0) {
-            setSessionMinutes((prevSessionMinutes) =>
-              Math.max(0, prevSessionMinutes - 1)
-            );
-            // will this be overwritten by the setTimer on line 83?
-            // or will this exit the condition if(!isBreak) bc I set it to true?
-            let newSeconds = 59; // Reset seconds to 59 after reaching 0
-            setTimer(formatTime(sessionMinutes, newSeconds));
-          }
-          if (sessionMinutes === 0 && newSeconds <= 0) {
+          // Check if both sessionMinutes and newSeconds are zero
+          if (sessionMinutes === 0 && prevSessionMinutes === 1) {
             setIsBreak(true);
-            setTimer(formatTime(breakMinutes, newSeconds));
-            console.log(isBreak);
+            setTimer(formatTime(breakMinutes, 0)); // Start the break with 0 seconds
+          } else {
+            setTimer(formatTime(sessionMinutes, 59));
           }
         }
 
@@ -124,10 +82,40 @@ function App() {
 
     setIntervalId(newIntervalId);
   }
+
+  // function startCountdown() {
+  //   const newIntervalId = setInterval(function () {
+  //     setRemainingSeconds((prevRemainingSeconds) => {
+  //       const newSeconds = Math.max(0, prevRemainingSeconds - 1);
+  //       if (newSeconds <= 0) {
+  //         setSessionMinutes((prevSessionMinutes) =>
+  //           Math.max(0, prevSessionMinutes - 1)
+  //         );
+  //       }
+  //       setTimer(formatTime(sessionMinutes, newSeconds));
+  //       return newSeconds;
+  //     });
+  //   }, 100);
+  //   setIntervalId(newIntervalId);
+  // }
 
   useEffect(() => {
     setTimer(formatTime(sessionMinutes, remainingSeconds));
   }, [sessionMinutes, remainingSeconds]);
+
+  useEffect(() => {
+    if (isActive) {
+      startCountdown();
+    } else {
+      clearInterval(intervalId);
+    }
+  }, [isActive]);
+
+  useEffect(() => {
+    if (isBreak) {
+      console.log(isBreak);
+    }
+  }, [isBreak]);
 
   return (
     <div className="container">
