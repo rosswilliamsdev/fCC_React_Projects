@@ -6,11 +6,20 @@ import "./App.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 function App() {
-  let [breakMinutes, setBreakMinutes] = useState(5);
-  let [sessionMinutes, setSessionMinutes] = useState(25);
-  let [timer, setTimer] = useState(25);
-  let [isActive, setIsActive] = useState(false);
-  let [seconds, setSeconds] = useState(0);
+  const initialSessionMinutes = 25;
+  const [breakMinutes, setBreakMinutes] = useState(5);
+  const [sessionMinutes, setSessionMinutes] = useState(initialSessionMinutes);
+  const [timer, setTimer] = useState(formatTime(sessionMinutes, 0));
+  const [isActive, setIsActive] = useState(false);
+  const [isBreak, setIsBreak] = useState(false);
+  const [remainingSeconds, setRemainingSeconds] = useState(0);
+  const [intervalId, setIntervalId] = useState(null);
+
+  function formatTime(minutes, seconds) {
+    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    return `${formattedMinutes}:${formattedSeconds}`;
+  }
 
   function handleIncrement(e) {
     let element = e.target;
@@ -38,55 +47,87 @@ function App() {
 
   function toggleTimer() {
     setIsActive(!isActive);
-    if (isActive) {
-      countdown();
+    if (!isActive) {
+      startCountdown();
+    } else {
+      clearInterval(intervalId);
     }
   }
 
   function resetTimer() {
     setIsActive(false);
-    setSessionMinutes(25);
+    setSessionMinutes(initialSessionMinutes);
     setBreakMinutes(5);
+    setRemainingSeconds(0);
+    clearInterval(intervalId);
   }
 
-  // function minutesCountdown() {
-  //   setTimeout(function () {
-  //     setSessionMinutes((prevSessionLength) =>
-  //       Math.max(0, prevSessionLength - 1)
-  //     );
-  //   }, 1000);
-  // }
 
-  function countdown() {
-    const intervalId = setInterval(function () {
-      setSeconds((prevSeconds) => {
-        const newSeconds = Math.max(0, prevSeconds - 1);
+  function startCountdown() {
+    const newIntervalId = setInterval(function () {
+      setRemainingSeconds((prevRemainingSeconds) => {
+        const newSeconds = Math.max(0, prevRemainingSeconds - 1);
 
-        if (newSeconds === 0) {
-          setSessionMinutes((prevSessionMinutes) =>
-            Math.max(0, prevSessionMinutes - 1)
-          );
+        if (!isBreak) {
+          if (newSeconds <= 0) {
+            setSessionMinutes((prevSessionMinutes) =>
+              Math.max(0, prevSessionMinutes - 1)
+            );
 
-          if (sessionMinutes === 0) {
-            clearInterval(intervalId);
-            resetTimer();
+            // Check if both sessionMinutes and newSeconds are zero
+            if (sessionMinutes === 0 && prevSessionMinutes === 1) {
+              setIsBreak(true);
+              setTimer(formatTime(breakMinutes, 0)); // Start the break with 0 seconds
+            } else {
+              setTimer(formatTime(sessionMinutes, 59));
+            }
           }
-
-          return 59; // Reset seconds to 59 after reaching 0
+        } else {
+          // Handle break countdown
+          if (newSeconds <= 0) {
+            // Handle break countdown logic here
+          }
         }
 
         return newSeconds;
       });
     }, 1000);
+
+    setIntervalId(newIntervalId);
+  }
+
+  function startCountdown() {
+    const newIntervalId = setInterval(function () {
+      setRemainingSeconds((prevRemainingSeconds) => {
+        const newSeconds = Math.max(0, prevRemainingSeconds - 1);
+
+        if (!isBreak) {
+          if (newSeconds <= 0) {
+            setSessionMinutes((prevSessionMinutes) =>
+              Math.max(0, prevSessionMinutes - 1)
+            );
+            // will this be overwritten by the setTimer on line 83?
+            // or will this exit the condition if(!isBreak) bc I set it to true?
+            let newSeconds = 59; // Reset seconds to 59 after reaching 0
+            setTimer(formatTime(sessionMinutes, newSeconds));
+          }
+          if (sessionMinutes === 0 && newSeconds <= 0) {
+            setIsBreak(true);
+            setTimer(formatTime(breakMinutes, newSeconds));
+            console.log(isBreak);
+          }
+        }
+
+        return newSeconds;
+      });
+    }, 1000);
+
+    setIntervalId(newIntervalId);
   }
 
   useEffect(() => {
-    const formattedSeconds =
-      seconds === 60 ? "00" : seconds < 10 ? `0${seconds}` : seconds;
-    const formattedMinutes =
-      sessionMinutes < 10 ? `0${sessionMinutes}` : sessionMinutes;
-    setTimer(`${formattedMinutes}:${formattedSeconds}`);
-  }, [sessionMinutes, seconds]);
+    setTimer(formatTime(sessionMinutes, remainingSeconds));
+  }, [sessionMinutes, remainingSeconds]);
 
   return (
     <div className="container">
@@ -109,7 +150,7 @@ function App() {
           id="session-length"
         />
       </div>
-      <Timer timer={timer} />
+      <Timer timer={timer} isBreak={isBreak} />
       <TimerControls
         toggleTimer={toggleTimer}
         isActive={isActive}
