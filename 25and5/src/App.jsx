@@ -8,7 +8,7 @@ import "@fortawesome/fontawesome-free/css/all.css";
 function App() {
   const initialSessionMinutes = 25;
   const [breakMinutes, setBreakMinutes] = useState(5);
-  const [sessionMinutes, setSessionMinutes] = useState(initialSessionMinutes);
+  const [sessionMinutes, setSessionMinutes] = useState(2);
   const [timer, setTimer] = useState(formatTime(sessionMinutes, 0));
   const [isActive, setIsActive] = useState(false);
   const [isBreak, setIsBreak] = useState(false);
@@ -68,16 +68,12 @@ function App() {
           );
 
           // Check if both sessionMinutes and newSeconds are zero
-          if (sessionMinutes === 0 && newSeconds <= 0) {
-            setIsBreak(true);
-            setTimer(formatTime(breakMinutes, 0)); // Start the break with 0 seconds
-          }
+
           return 59;
         }
-
         return newSeconds;
       });
-    }, 100);
+    }, 10);
 
     setIntervalId(newIntervalId);
   }
@@ -85,6 +81,14 @@ function App() {
   useEffect(() => {
     setTimer(formatTime(sessionMinutes, remainingSeconds));
   }, [sessionMinutes, remainingSeconds]);
+
+  useEffect(() => {
+    console.log(sessionMinutes, remainingSeconds);
+    if (sessionMinutes <= 0 && remainingSeconds <= 1) {
+      setIsBreak(true);
+      setTimer(formatTime(breakMinutes, 0));
+    }
+  }, [remainingSeconds]);
 
   useEffect(() => {
     if (isActive) {
