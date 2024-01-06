@@ -12,7 +12,7 @@ function App() {
   const [timer, setTimer] = useState(formatTime(sessionMinutes, 0));
   const [isActive, setIsActive] = useState(false);
   const [isBreak, setIsBreak] = useState(false);
-  const [remainingSeconds, setRemainingSeconds] = useState(59);
+  const [remainingSeconds, setRemainingSeconds] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
 
   function formatTime(minutes, seconds) {
@@ -68,36 +68,19 @@ function App() {
           );
 
           // Check if both sessionMinutes and newSeconds are zero
-          if (sessionMinutes === 0 && prevSessionMinutes === 1) {
+          if (sessionMinutes === 0 && newSeconds <= 0) {
             setIsBreak(true);
             setTimer(formatTime(breakMinutes, 0)); // Start the break with 0 seconds
-          } else {
-            setTimer(formatTime(sessionMinutes, 59));
           }
+          return 59;
         }
 
         return newSeconds;
       });
-    }, 1000);
+    }, 100);
 
     setIntervalId(newIntervalId);
   }
-
-  // function startCountdown() {
-  //   const newIntervalId = setInterval(function () {
-  //     setRemainingSeconds((prevRemainingSeconds) => {
-  //       const newSeconds = Math.max(0, prevRemainingSeconds - 1);
-  //       if (newSeconds <= 0) {
-  //         setSessionMinutes((prevSessionMinutes) =>
-  //           Math.max(0, prevSessionMinutes - 1)
-  //         );
-  //       }
-  //       setTimer(formatTime(sessionMinutes, newSeconds));
-  //       return newSeconds;
-  //     });
-  //   }, 100);
-  //   setIntervalId(newIntervalId);
-  // }
 
   useEffect(() => {
     setTimer(formatTime(sessionMinutes, remainingSeconds));
