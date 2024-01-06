@@ -1,163 +1,159 @@
-import { useEffect, useState } from "react";
-import LengthAdjuster from "./LengthAdjuster";
-import Timer from "./Timer";
-import TimerControls from "./TimerControls";
-import "./App.css";
-import "@fortawesome/fontawesome-free/css/all.css";
+import { useEffect, useState } from 'react';
+import LengthAdjuster from './LengthAdjuster';
+import Timer from './Timer';
+import TimerControls from './TimerControls';
+import './App.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 function App() {
-  const initialSessionMinutes = 25;
-  const [breakMinutes, setBreakMinutes] = useState(5);
-  const [sessionMinutes, setSessionMinutes] = useState(initialSessionMinutes);
-  const [timer, setTimer] = useState(formatTime(sessionMinutes, 0));
-  const [isActive, setIsActive] = useState(false);
-  const [isBreak, setIsBreak] = useState(false);
-  const [remainingSeconds, setRemainingSeconds] = useState(0);
-  const [intervalId, setIntervalId] = useState(null);
+    //defaults
+    const initialSessionTime = 25 * 60;
+    const initialBreakTime = 5 * 60;
 
-  function formatTime(minutes, seconds) {
-    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    return `${formattedMinutes}:${formattedSeconds}`;
-  }
+    //variables to hold the initial selected session and break time
+    const [selectedSessionTime, setSelectedSessionTime] = useState(
+        initialSessionTime
+    );
+    const [selectedBreakTime, setSelectedBreakTime] = useState(
+        initialBreakTime
+    );
 
-  function handleIncrement(e) {
-    let element = e.target;
+    //variables to hold the current session and break times as they change
+    const [sessionTime, setSessionTime] = useState(initialSessionTime);
+    const [breakTime, setBreakTime] = useState(initialBreakTime);
 
-    if (element.className.includes("break")) {
-      setBreakMinutes((prevBreakLength) => Math.min(60, prevBreakLength + 1));
-    } else if (element.className.includes("session")) {
-      setSessionMinutes((prevSessionLength) =>
-        Math.min(60, prevSessionLength + 1)
-      );
+    const [timer, setTimer] = useState(formatTime(initialSessionTime));
+    const [isActive, setIsActive] = useState(false);
+    const [isBreak, setIsBreak] = useState(false);
+    // const [remainingSeconds, setRemainingSeconds] = useState(0);
+    const [intervalId, setIntervalId] = useState(null);
+
+    function formatTime(timeInSeconds) {
+        let minutes = Math.floor(timeInSeconds / 60);
+        let seconds = timeInSeconds % 60;
+        const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        return `${formattedMinutes}:${formattedSeconds}`;
     }
-  }
 
-  function handleDecrement(e) {
-    let element = e.target;
+    function handleIncrement(e) {
+        let element = e.target;
 
-    if (element.className.includes("break")) {
-      setBreakMinutes((prevBreakLength) => Math.max(0, prevBreakLength - 1));
-    } else if (element.className.includes("session")) {
-      setSessionMinutes((prevSessionLength) =>
-        Math.max(0, prevSessionLength - 1)
-      );
+        if (element.className.includes('break')) {
+            setSelectedBreakTime((prev) => prev + 60);
+            setBreakTime((prev) => prev + 60);
+        } else if (element.className.includes('session')) {
+            setSelectedSessionTime((prev) => prev + 60);
+            setSessionTime((prev) => prev + 60);
+        }
     }
-  }
 
-  function toggleTimer() {
-    setIsActive(!isActive);
-    if (!isActive) {
-      startCountdown();
-    } else {
-      clearInterval(intervalId);
+    function handleDecrement(e) {
+        let element = e.target;
+
+        if (element.className.includes('break')) {
+            setSelectedBreakTime((prev) => prev - 60);
+            setBreakTime((prev) => prev - 60);
+        } else if (element.className.includes('session')) {
+            setSelectedSessionTime((prev) => prev - 60);
+            setSessionTime((prev) => prev - 60);
+        }
     }
-  }
 
-  function resetTimer() {
-    setIsActive(false);
-    setSessionMinutes(initialSessionMinutes);
-    setBreakMinutes(5);
-    setRemainingSeconds(0);
-    clearInterval(intervalId);
-  }
+    function toggleTimer() {
+        setIsActive(!isActive);
+    }
 
+    function resetTimer() {
+        setIsActive(false);
+        setIsBreak(false);
+        setSelectedSessionTime(initialSessionTime);
+        setSelectedBreakTime(initialBreakTime);
+        setSessionTime(initialSessionTime);
+        setBreakTime(initialBreakTime);
+        // clearInterval(intervalId); not needed because the isActive useEffect will clear the interval
+    }
 
-  function startCountdown() {
-    const newIntervalId = setInterval(function () {
-      setRemainingSeconds((prevRemainingSeconds) => {
-        const newSeconds = Math.max(0, prevRemainingSeconds - 1);
-
-        if (!isBreak) {
-          if (newSeconds <= 0) {
-            setSessionMinutes((prevSessionMinutes) =>
-              Math.max(0, prevSessionMinutes - 1)
-            );
-
-            // Check if both sessionMinutes and newSeconds are zero
-            if (sessionMinutes === 0 && prevSessionMinutes === 1) {
-              setIsBreak(true);
-              setTimer(formatTime(breakMinutes, 0)); // Start the break with 0 seconds
+    const startCountdown = (isBreak) => {
+        let intervalId = setInterval(() => {
+            if (isBreak) {
+                setBreakTime((prev) => prev - 1);
             } else {
-              setTimer(formatTime(sessionMinutes, 59));
+                setSessionTime((prev) => prev - 1);
             }
+        }, 100);
+        setIntervalId(intervalId);
+    };
+
+    useEffect(() => {
+        if (isActive) {
+          if (isBreak) {
+            startCountdown(true);
+          }
+          if (!isBreak) {
+            startCountdown(false);
           }
         } else {
-          // Handle break countdown
-          if (newSeconds <= 0) {
-            // Handle break countdown logic here
-          }
+            clearInterval(intervalId);
         }
+    }, [isActive, isBreak]);
 
-        return newSeconds;
-      });
-    }, 1000);
-
-    setIntervalId(newIntervalId);
-  }
-
-  function startCountdown() {
-    const newIntervalId = setInterval(function () {
-      setRemainingSeconds((prevRemainingSeconds) => {
-        const newSeconds = Math.max(0, prevRemainingSeconds - 1);
-
+    useEffect(() => {
         if (!isBreak) {
-          if (newSeconds <= 0) {
-            setSessionMinutes((prevSessionMinutes) =>
-              Math.max(0, prevSessionMinutes - 1)
-            );
-            // will this be overwritten by the setTimer on line 83?
-            // or will this exit the condition if(!isBreak) bc I set it to true?
-            let newSeconds = 59; // Reset seconds to 59 after reaching 0
-            setTimer(formatTime(sessionMinutes, newSeconds));
-          }
-          if (sessionMinutes === 0 && newSeconds <= 0) {
-            setIsBreak(true);
-            setTimer(formatTime(breakMinutes, newSeconds));
-            console.log(isBreak);
-          }
+            setTimer(formatTime(sessionTime));
+        } else {
+            setTimer(formatTime(breakTime));
         }
+    }, [sessionTime, breakTime, isBreak]);
 
-        return newSeconds;
-      });
-    }, 1000);
+    useEffect(() => {
+        if (sessionTime === 0) {
+          console.log('sessionTime === 0');
+          clearInterval(intervalId);
+          setIsBreak(true);
+          setBreakTime(selectedBreakTime);
+          setSessionTime(selectedSessionTime);
+        } else if (breakTime === 0) {
+          console.log('breakTime === 0');
+          setIsBreak(false);
+          setBreakTime(selectedBreakTime);
+          setSessionTime(selectedSessionTime);
+          clearInterval(intervalId);
+        }
+    }, [sessionTime, breakTime, selectedBreakTime, selectedSessionTime, intervalId]);
 
-    setIntervalId(newIntervalId);
-  }
+    return (
+        <div className='container'>
+            <h1>25 + 5 Timer</h1>
+            <div className='length-adjuster-container'>
+                <LengthAdjuster
+                    handleIncrement={handleIncrement}
+                    handleDecrement={handleDecrement}
+                    formatTime={formatTime}
+                    type='break'
+                    text='Break Length'
+                    length={selectedBreakTime}
+                    id='break-length'
+                />
+                <LengthAdjuster
+                    handleIncrement={handleIncrement}
+                    handleDecrement={handleDecrement}
+                    formatTime={formatTime}
 
-  useEffect(() => {
-    setTimer(formatTime(sessionMinutes, remainingSeconds));
-  }, [sessionMinutes, remainingSeconds]);
-
-  return (
-    <div className="container">
-      <h1>25 + 5 Timer</h1>
-      <div className="length-adjuster-container">
-        <LengthAdjuster
-          handleIncrement={handleIncrement}
-          handleDecrement={handleDecrement}
-          type="break"
-          text="Break Length"
-          length={breakMinutes}
-          id="break-length"
-        />
-        <LengthAdjuster
-          handleIncrement={handleIncrement}
-          handleDecrement={handleDecrement}
-          type="session"
-          text="Session Length"
-          length={sessionMinutes}
-          id="session-length"
-        />
-      </div>
-      <Timer timer={timer} isBreak={isBreak} />
-      <TimerControls
-        toggleTimer={toggleTimer}
-        isActive={isActive}
-        resetTimer={resetTimer}
-      />
-    </div>
-  );
+                    type='session'
+                    text='Session Length'
+                    length={selectedSessionTime}
+                    id='session-length'
+                />
+            </div>
+            <Timer timer={timer} isBreak={isBreak} />
+            <TimerControls
+                toggleTimer={toggleTimer}
+                isActive={isActive}
+                resetTimer={resetTimer}
+            />
+        </div>
+    );
 }
 
 export default App;
