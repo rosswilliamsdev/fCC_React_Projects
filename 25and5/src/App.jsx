@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import LengthAdjuster from "./LengthAdjuster";
 import Timer from "./Timer";
@@ -66,9 +67,6 @@ function App() {
           setSessionMinutes((prevSessionMinutes) =>
             Math.max(0, prevSessionMinutes - 1)
           );
-
-          // Check if both sessionMinutes and newSeconds are zero
-
           return 59;
         }
         return newSeconds;
@@ -83,7 +81,6 @@ function App() {
   }, [sessionMinutes, remainingSeconds]);
 
   useEffect(() => {
-    console.log(sessionMinutes, remainingSeconds);
     if (sessionMinutes <= 0 && remainingSeconds <= 1) {
       setIsBreak(true);
       setTimer(formatTime(breakMinutes, 0));
