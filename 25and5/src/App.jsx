@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import LengthAdjuster from "./LengthAdjuster";
 import Timer from "./Timer";
@@ -5,8 +6,10 @@ import TimerControls from "./TimerControls";
 import "./App.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 
+// Seconds is the increment used for the logic of the timer
+
 function App() {
-  //defaults
+  //default times, with seconds
   const initialSessionTime = 25 * 60;
   const initialBreakTime = 5 * 60;
 
@@ -22,7 +25,6 @@ function App() {
   const [timer, setTimer] = useState(formatTime(initialSessionTime));
   const [isActive, setIsActive] = useState(false);
   const [isBreak, setIsBreak] = useState(false);
-  // const [remainingSeconds, setRemainingSeconds] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
 
   function formatTime(timeInSeconds) {
@@ -33,9 +35,9 @@ function App() {
     return `${formattedMinutes}:${formattedSeconds}`;
   }
 
+  // increments the initial time for the timer
   function handleIncrement(e) {
     let element = e.target;
-
     if (element.className.includes("break")) {
       setSelectedBreakTime((prev) => Math.max(60, prev + 60));
       setBreakTime((prev) => Math.max(60, prev + 60));
@@ -44,7 +46,7 @@ function App() {
       setSessionTime((prev) => Math.max(60, prev + 60));
     }
   }
-
+  // decrements the inital time for the timer
   function handleDecrement(e) {
     let element = e.target;
 
@@ -56,11 +58,11 @@ function App() {
       setSessionTime((prev) => Math.max(60, prev - 60));
     }
   }
-
+  // toggles whether the timer is running
   function toggleTimer() {
     setIsActive(!isActive);
   }
-
+  // returns everything to its default state
   function resetTimer() {
     setIsActive(false);
     setIsBreak(false);
@@ -71,7 +73,7 @@ function App() {
     document.getElementById("beep").pause();
     document.getElementById("beep").currentTime = 0;
   }
-
+  // decrements breaktime or sessiontime by 1 every second
   const startCountdown = (isBreak) => {
     let intervalId = setInterval(() => {
       if (isBreak) {
@@ -82,7 +84,7 @@ function App() {
     }, 1000);
     setIntervalId(intervalId);
   };
-
+  // if timer is activated, countdown from either break or session
   useEffect(() => {
     if (isActive) {
       if (isBreak) {
@@ -96,6 +98,7 @@ function App() {
     }
   }, [isActive, isBreak]);
 
+  // updates the display
   useEffect(() => {
     if (!isBreak) {
       setTimer(formatTime(sessionTime));
@@ -104,6 +107,7 @@ function App() {
     }
   }, [sessionTime, breakTime, isBreak]);
 
+  // Once timer reaches zero, switch to the other time (break/session)
   useEffect(() => {
     if (sessionTime === 0) {
       console.log("sessionTime === 0");
