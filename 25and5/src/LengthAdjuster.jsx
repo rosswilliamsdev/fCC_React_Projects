@@ -4,6 +4,7 @@ export default function LengthAdjuster({
   handleIncrement,
   handleDecrement,
   type,
+  formatTime,
 }) {
   return (
     <div className="length-adjuster">
@@ -12,7 +13,7 @@ export default function LengthAdjuster({
         <button onClick={handleIncrement} id={`${type}-increment`}>
           <i className={`fa-solid fa-arrow-up ${type}`}></i>
         </button>
-        {length}
+        {formatTime(length)}
         <button onClick={handleDecrement} id={`${type}-decrement`}>
           <i className={`fa-solid fa-arrow-down ${type}`}></i>
         </button>
