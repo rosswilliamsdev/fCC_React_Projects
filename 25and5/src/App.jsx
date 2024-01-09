@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import LengthAdjuster from './LengthAdjuster';
 import Timer from './Timer';
@@ -34,10 +35,12 @@ function App() {
         const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
         const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
         return `${formattedMinutes}:${formattedSeconds}`;
+
     }
 
     function handleIncrement(e) {
         let element = e.target;
+
 
         if (element.className.includes('break')) {
             setSelectedBreakTime((prev) => prev + 60);
@@ -48,8 +51,10 @@ function App() {
         }
     }
 
+
     function handleDecrement(e) {
         let element = e.target;
+
 
         if (element.className.includes('break')) {
             setSelectedBreakTime((prev) => prev - 60);
@@ -154,6 +159,7 @@ function App() {
             />
         </div>
     );
+
 }
 
 export default App;
